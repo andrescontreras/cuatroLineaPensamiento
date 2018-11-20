@@ -1,0 +1,17 @@
+15
+15
+XXXXXXXXXXXXXXX
+X_____________X
+X__$__________X
+X_XXX__XXXXXXXX
+X_X____XXX____X
+X______XXX__$_X
+X___X_$X______X
+X_$_X_________X
+X___X_@_XXXXXXX
+XXXXX___XX____X
+X___X_________X
+X_$_X__XXX__X_X
+X______XX__MXMX
+X______XX__MMMX
+XXXXXXXXXXXXXXX
