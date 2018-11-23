@@ -47,7 +47,111 @@ def calculatedistance( P , J):
     R = math.sqrt(z)
     return R     
 
-def movetobox ( J , C , board):
+def ubicate(pos, C, board):
+    i = C[1]
+    j = C[0]
+    ya = 0
+    ya2 = 0
+    k = 0
+    board.Print()
+    print("Pos", pos)
+    carry = 0
+    while (pos[1] != board.playerpos[0] or pos[0] != board.playerpos[1]):
+        if (pos[1] == board.playerpos[0]):
+            board.Print()
+            print("Especial CASE before", board.playerpos[1], pos[0])
+            if (pos[0] - 1 == board.playerpos[0]):
+                print("Especial CASE")
+                board.movimientos("D")
+                carry = 1
+            else:
+                if (pos[0] + 1 == board.playerpos[0]):
+                    board.movimientos("A")
+                    carry = 1
+        else:
+            if (pos[0] == board.playerpos[1]):
+                if (pos[1] - 1 == board.playerpos[1]):
+                    print("Especial CASE")
+                    board.movimientos("W")
+                    carry = 1
+            else:
+                if (pos[1] + 1 == board.playerpos[1]):
+                    board.movimientos("S")
+                    carry = 1
+        if carry == 0: 
+            if (j < C[1] + 1 and ya == 0):
+                #print(M[i][j])
+                board.movimientos("A")
+                print("A")
+                j = j + 1
+            else:
+                ya = 1
+                if (i <= C[0] + 1 and ya2 == 0):
+                    #print(M[i][j])
+                    board.movimientos("W")
+                    print("W")
+                    i = i + 1
+                else:
+                    ya2 = 1
+                    if (j > C[1] - 1):
+                        #print(M[i][j])
+                        board.movimientos("S")
+                        print("S")
+                        j = j - 1
+                    else:
+                        if (i >= C[0] - 1):
+                        #print(M[i][j])
+                            board.movimientos("D")
+                            print("D")
+                            i = i - 1
+        board.Print()
+        k = k + 1
+
+
+
+def gototherightplace(J, C, M, board):
+    A = [J[0],J[1]]
+    y = C[0] - M[0]
+    x = C[1] - M[1]
+    print("C: ",C)
+    print("M: ",M)
+    print("X: ",abs(x))
+    print("Y: ",abs(y))
+    if abs( x ) > abs( y ): #Si se mueve en x
+        if x < 0: #Izquierda
+            D = "A"
+            pos = [ C[ 0 ] - 1,C[ 1 ] ]
+            print("PosA:",pos)
+        else: #derecha
+            if x > 0:
+                D = "D"
+                pos = [ C[ 0 ] + 1,C[ 1 ] ]
+                print("PosD:",pos)
+        #end if
+    else:
+        if y < 0: # Si se mueve en y arriba
+            D = "W"
+            pos = [ C[ 0 ],C[ 1 ] - 1]
+            print("PosW:",pos)
+        else:
+            if y > 0: #abajo
+                D = "S"
+                pos = [ C[ 0 ],C[ 1 ] + 1]
+                print("PosS:",pos)
+        #end if
+    #end if
+    print("Pos:",pos)
+    ubicate(pos,C,board)
+
+    
+
+
+
+
+
+
+
+def movetobox ( J , C , M, board):
     #Codigo para mover al jugador hacia la caja
     A = [J[0],J[1]]
     distancia = calculatedistance( A, C )
@@ -163,126 +267,12 @@ def movetobox ( J , C , board):
         #print("D---",distancia)
         #print("iteracion")
     #end while
+    gototherightplace(A, C, M, board)
     
     #print("End while")
 #end function
 
-def movebox (J, C, M,board):
-#print("jugador",J,"CAJA",C,"META",M)
-    A = [C[0],C[1]]
-    distancia = calculatedistance( A, M )
-    while ( distancia > 0 ):
-        board.Print()
-        time.sleep(1.0)
-        y = M[0] - A[0]
-        x = M[1] - A[1]
-        if abs( x ) > abs( y ): #Si se mueve en x
-    #        print("J-",J)
-            if x < 0: #Derecha
-                board.movimientos("A")
-                P = board.playerpos
-     #           print(J,P)
-      #          print("A")
-                if P[0] == A[0] and P[1] == A[1]:
-                    #Si no se movio
-                    if y > 0:
-                        P = board.movimientos("S")
-       #                 print("SA")
-                        A[0] = P[0]
-                        A[1] = P[1]
-                    else:
-                        P = board.movimientos("W")
-        #                print("WA")
-                        A[0] = P[0]
-                        A[1] = P[1]
-                    #end if
-                else:
-                    #Si se movio
-                    print(P,"aquiiiii")
-                    A[0]=P[0]
-                    A[0]=P[0]
-                #end if
-            else: #Izquierda
-                if x > 0:
-                    P = board.movimientos("D")
-         #           print(P,"aquiiiii")
-          #          print("D")
-                    if P[0] == A[0] and P[1] == A[1]:
-                        #Si no se movio
-                        if y > 0:
-                            P = board.movimientos("S")
-          #                 print("DS")
-                            A[0] = P[0]
-                            A[1] = P[1]
-                        else:
-                            P = board.movimientos("W")
-            #                print("DW")
-                            A[0] = P[0]
-                            A[1] = P[1]
-                        #end if
-                    else:
-                        #Si se movio
-             #           print(P,"aquiiiii")
-                        A[0] = P[0]
-                        A[1] = P[1]
-                    #end if
-            #end if
-        else:
-            if y < 0: # Si se mueve en y arriba
-                P = board.movimientos("W")
-              #  print("W")
-                if P[0] == A[0] and P[1] == A[1]:
-                    #Si no se movio
-                    if x > 0:
-                        P = board.movimientos("D")
-               #         print("WD")
-                        A[0] = P[0]
-                        A[1] = P[1]
-                    else:
-                        P = board.movimientos("A")
-                #        print("WA")
-                        A[0] = P[0]
-                        A[1] = P[1]
-                    #end if
-                else:
-                    #Si se movio
-                    A[0] = P[0]
-                    A[1] = P[1]
-                #end if
-            else:
-                if y > 0: #abajo
-                    P = board.movimientos("S")
-                 #   print("S")
-                    if P[0] == A[0] and P[1] == A[1]:
-                        #Si no se movio
-                        if x > 0:
-                            P = board.movimientos("D")
-                  #          print("SD")
-                            A[0] = P[0]
-                            A[1] = P[1]
-                        else:
-                            P = board.movimientos("A")
-                   #         print("SA")
-                            A[0] = P[0]
-                            A[1] = P[1]
-                        #end if
-                    else:
-                        #Si se movio
-                        A[0] = P[0]
-                        A[1] = P[1]
-                    #end if
-            #end if
-        #end if
-        
-        distancia = calculatedistance( A, M )
-       # print("A: ",A)
-        #print("C: ",C)
-        print("D---",distancia)
-        #print("iteracion")
-    #end while
-    
-    #print("End while")
-#Codigo intentar mover la caja
+#def movebox (J, C, M,board):
 
 
 def algoritmo():
@@ -327,7 +317,7 @@ def algoritmo():
         #print( metacercana ) #Print
 
         #MOVERSE HASTA LA CAJA Y PONERSE CONTRARIO A LA META
-        movetobox(board.playerpos,cajacercana, board)
+        movetobox(board.playerpos,cajacercana,metacercana,board)
         #INTENTAR MOVER LA CAJA
         #movebox(board.playerpos,cajacercana,metacercana,board)
         gano = board.estadoJugador()
