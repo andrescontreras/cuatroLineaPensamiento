@@ -3,58 +3,54 @@ import const
 import math
 import time
 
-
 class Jugador:
     cajas = []
     metas = []
     direccion = True  # true -> horizontal ,false -> vertical
-    tablero = [[]]
-    board
+    board = []
+    cont =0
 
     def jugar(self):
         arch = "Niveles/nivel1.txt"
         self.board = Sokoban.Board(arch)
-        Jugador.tablero = self.board.Data
         self.buscarCajasMetas()
+        self.board.Print()
         while (len(self.cajas) != 0 and self.board.estadoJugador() != 0 and self.board.estadoJugador() != 2):
             cajacercana = self.getCajaCercana()
             metacerca = self.getMetaCercana(cajacercana)
             self.moverJugadorAcaja(cajacercana)
-            while(cajacercana != metacerca):
+            while(self.cajas[cajacercana] !=  self.metas[metacerca]):
                 time.sleep(2.0)
-                movimientos = self.decisionCamino(cajacercana, metacerca)
-                self.posicionarJugador(cajacercana, metacerca)
-                self.hacerMovimientos(movimientos,cajacercana)
-                print("========", cajacercana)
-                print("cajas--", self.cajas)
-                print("metas--",self.metas)
-                self.board.Print()
-            self.cajas.remove(cajacercana)
-            self.metas.remove(metacerca)
+                movimientos = self.decisionCamino(self.cajas[cajacercana], self.metas[metacerca])
 
+            
+
+    
     def buscarCajasMetas(self):
-        for i in range(len(self.tablero) - 1):
-            for j in range(len(self.tablero[i]) - 1):
-                if self.tablero[i][j] == const.CAJA:
-                    self.cajas.append([i, j])
+        for i in range(len(self.board.Data) - 1):
+            for j in range(len(self.board.Data[i]) - 1):
+                if self.board.Data[i][j] == const.CAJA:
+                    self.cajas.append([j, i])
                 # end if
-                if self.tablero[i][j] == const.META:
-                    self.metas.append([i, j])
+                if self.board.Data[i][j] == const.META:
+                    self.metas.append([j, i])
                 # end if
             # end for
         # end for
         print("C",self.cajas);
         print("M",self.metas)
+        print("J",self.board.getPlayerPos())
+        self.board.Print()
 
     def getCajaCercana(self):
         cajacercana = []
         min_d = 100000
         for i in range(len(self.cajas)):
             dis = self.calcularDistancia(
-                self.cajas[i], self.board.playerpos)
+                self.cajas[i], self.board.getPlayerPos())
             if dis < min_d:
                 min_d = dis
-                cajacercana = self.cajas[i]
+                cajacercana = i
             # end if
             # end for
         return cajacercana
@@ -63,14 +59,14 @@ class Jugador:
         min_d = 100000
         metacercana = []
         for i in range(len(self.metas)):
-            dis = self.calcularDistancia(cajacercana, self.metas[i])
+            dis = self.calcularDistancia(self.cajas[cajacercana], self.metas[i])
             if dis < min_d:
                 min_d = dis
-                metacercana = self.metas[i]
+                metacercana = i
             # end if
         # end for
         return metacercana
-
+    
     def calcularDistancia(self, P, J):
         # print(P)
         # print(J)
@@ -82,19 +78,31 @@ class Jugador:
         R = math.sqrt(z)
         return R
 
-    def moverJugadorAcaja(self, cajacercana):
-        # Codigo para mover al jugador hacia la caja
-        A = self.board.playerpos
+    def decisionCamino(self, cajacercana, metacerca):
+        if(self.direccion == True):
+            dir = metacerca[0]-cajacercana[0]
+            return dir
+        else:
+            dir = cajacercana[1]-metacerca[1]
+            return dir
+    
+    def posicionarJugador(self,cajacercana, metacerca):
+        
 
-        distancia = self.calcularDistancia(A, cajacercana)
+    
+    def moverJugadorAcaja(self,cajacercana):
+        # Codigo para mover al jugador hacia la caja
+        A = self.board.getPlayerPos()
+
+        distancia = self.calcularDistancia(A, self.cajas[cajacercana])
         # print("distancia",distancia)
         while (distancia > 1.0):
         #    print("J: ",J)#Jugador
         #    print("C: ",C)#Caja
             time.sleep(2.0)
             self.board.Print()
-            y = cajacercana[0] - A[0]
-            x = cajacercana[1] - A[1]
+            y = cajacercana[1] - A[1]
+            x = cajacercana[0] - A[0]
         #    print( abs(x) , abs(y) )
             if abs(x) > abs(y):  # Si se mueve en x
         #        print("J-",J)
@@ -103,6 +111,11 @@ class Jugador:
                     self.board.movimientos("A")
         #           print("J-",A)
                     P = self.board.playerpos
+                    aux2=[0,0]
+                    aux2[0] = P[1]
+                    aux2[1] = P[0]
+                    P = aux2
+
         #          print(J,P)
         #         print("A")
                     if P[0] == A[0] and P[1] == A[1]:
@@ -194,86 +207,6 @@ class Jugador:
             # end if
 
             distancia = self.calcularDistancia(A, cajacercana)
-            # print("A: ",A)
-            # print("C: ",C)
-            # print("D---",distancia)
-            # print("iteracion")
-        # end while
-
-        # print("End while")
-
-    def posicionarJugador(self,cajacercana, metacerca):
-         if(self.direccion == True):
-            dir = metacerca[1]-cajacercana[1]
-            print("xxxxxx ", dir)
-         else:
-            dir = cajacercana[0]-metacerca[0]
-            print("xxxxxx ",dir)
-         if(self.direccion == False and dir > 0):
-            self.board.movimientos("SA")
-
-            
-    def decisionCamino(self, cajacercana, metacerca):
-        if(self.direccion == True):
-            dir = metacerca[1]-cajacercana[1]
-            print("xx11 ",dir)
-            return dir
-        else:
-            dir = cajacercana[0]-metacerca[0]
-            print("xxx11 ",dir)
-            return dir
-
-    def hacerMovimientos(self, movimientos,cajacercana):
-        pos = self.board.playerpos
-        if(self.direccion == True and movimientos > 0):
-            for i in range(movimientos):
-                posFinal = self.board.movimientos("D")
-                self.board.Print()
-                if self.board.playerpos==cajacercana:
-                    cajacercana[1]=cajacercana[1]+1
-                if(pos == posFinal):
-                    self.direccion = not(self.direccion)
-                    return
-            self.direccion = not(self.direccion)
-            print("DDDDDDDDDDD")
-        elif(self.direccion == True and movimientos < 0):
-            for i in range(abs(movimientos)):
-                posFinal = self.board.movimientos("A")
-                self.board.Print()
-                if self.board.playerpos==cajacercana:
-                    cajacercana[1]=cajacercana[1]-1
-                if(pos == posFinal):
-                    self.direccion = not(self.direccion)
-                    return
-            self.direccion = not(self.direccion)
-            print("AAAAAAAAAAAAAA")
-        elif(self.direccion == False and movimientos > 0):
-            for i in range(movimientos):
-                print("ENTRO''''''''''''''")
-                posFinal = self.board.movimientos("W")
-                self.board.Print()
-                print("posssss",self.board.playerpos)
-                print("cajaaaaaa",cajacercana)
-                print("posFInal",posFinal)
-                if self.board.playerpos[0]==cajacercana[0] and self.board.playerpos[1]==cajacercana[1]:
-                    print("sssssssssssssssssssssssssssss")
-                    cajacercana[0]=cajacercana[0]-1
-                if(pos == posFinal):
-                    self.direccion = not(self.direccion)
-                    return
-            self.direccion = not(self.direccion)
-           
-        elif(self.direccion == False and movimientos < 0):
-            for i in range(abs(movimientos)):
-                posFinal = self.board.movimientos("S")
-                self.board.Print()
-                if self.board.playerpos==cajacercana:
-                    cajacercana[0]=cajacercana[0]+1         
-                if(pos == posFinal):
-                    self.direccion = not(self.direccion)
-                    return
-            self.direccion = not(self.direccion)
 
 x = Jugador()
 x.jugar()
-        

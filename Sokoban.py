@@ -57,8 +57,19 @@ class Board:
                 self.mover(cadena[c])
                 self.Print()
                 time.sleep(0.2)
-        return self.playerpos
+                aux = self.playerpos
+                aux2=[0,0]
+                aux2[0] = aux[1]
+                aux2[1] = aux[0]
+        return aux2
     ## Fin movimientos =================================================================
+
+    def getPlayerPos(self):
+        aux = self.playerpos
+        aux2=[0,0]
+        aux2[0] = aux[1]
+        aux2[1] = aux[0]
+        return aux2
 
     ## Inicio cajaBloqueda ===========================================================
     def cajaBloqueada (self,posx,posy):
