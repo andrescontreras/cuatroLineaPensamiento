@@ -9,7 +9,7 @@ import time
 
 # Fin rutas ===================================
 def jugadorManual():
-    arch = "Niveles/nivel2.txt"
+    arch = "Niveles/nivel1.txt"
     board = Sokoban.Board(arch)
     board.Print()
 
@@ -286,7 +286,7 @@ def movebox (J, C, M,board):
 
 
 def algoritmo():
-    arch = "Niveles/nivel1.txt"
+    arch = "Niveles/nivel2.txt"
     board = Sokoban.Board(arch)
     tablero = board.Data
     cajas = []
@@ -329,7 +329,7 @@ def algoritmo():
         #MOVERSE HASTA LA CAJA Y PONERSE CONTRARIO A LA META
         movetobox(board.playerpos,cajacercana, board)
         #INTENTAR MOVER LA CAJA
-        movebox(board.playerpos,cajacercana,metacercana,board)
+        #movebox(board.playerpos,cajacercana,metacercana,board)
         gano = board.estadoJugador()
         if gano != 0 and gano != 2:
             cajas.remove(cajacercana)
