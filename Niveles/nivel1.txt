@@ -2,8 +2,8 @@
 7
 XXXXXXX
 XM___MX
-X__$__X
+X_____X
 X_$@$_X
 X__$__X
-XM___MX
+X__$__X
 XXXXXXX

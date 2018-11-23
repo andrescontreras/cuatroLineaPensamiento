@@ -9,7 +9,7 @@ import time
 
 # Fin rutas ===================================
 def jugadorManual():
-    arch = "Niveles/nivel2.txt"
+    arch = "Niveles/nivel1.txt"
     board = Sokoban.Board(arch)
     board.Print()
 
@@ -276,7 +276,7 @@ def movetobox ( J , C , M, board):
 
 
 def algoritmo():
-    arch = "Niveles/nivel1.txt"
+    arch = "Niveles/nivel2.txt"
     board = Sokoban.Board(arch)
     tablero = board.Data
     cajas = []
